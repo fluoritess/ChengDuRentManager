@@ -82,8 +82,9 @@
         var map = new AMap.Map("container", {
             resizeEnable: true,
             zoomEnable: true,
-            <!--center: [116.397428, 39.90923],-->
-            center: [104.067777,30.662956],
+            <!--center: [116.397428, 39.90923], 北京-->
+            <!-- center: [114.286453,30.618107], 武汉-->
+            center: [104.067777,30.662956],<!--成都-->
             zoom: 11
         });
 
@@ -101,7 +102,7 @@
         var polygonArray = [];
         //路径规划
         var amapTransfer;
-        //信息窗体对象
+        //信息窗体对象,点击房源点后出现
         var infoWindow = new AMap.InfoWindow({
             offset: new AMap.Pixel(0, -30)
         });
@@ -113,127 +114,27 @@
         //添加事件监听，在选择补完的地址后调用workLocationSelected
         AMap.event.addListener(auto, "select", workLocationSelected);
 
-
+        //坐公交
         function takeBus(radio) {
             vehicle = radio.value;
             loadWorkLocation()
         }
-
+        //坐地铁
         function takeSubway(radio) {
             vehicle = radio.value;
             loadWorkLocation()
         }
-
+        //载入房源文件
         function importRentInfo(fileInfo) {
             var file = fileInfo.files[0].name;
             loadRentLocationByFile(file);
         }
-        //更新工作地点，加载公交到达圈
-        function workLocationSelected(e) {
-            workAddress = e.poi.name;
-            loadWorkLocation();
-        }
-
-        function loadWorkMarker(x, y, locationName) {
-            workMarker = new AMap.Marker({
-                map: map,
-                title: locationName,
-                icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_r.png',
-                position: [x, y]
-
-            });
-        }
-
-
-        function loadWorkRange(x, y, t, color, v) {
-            arrivalRange.search([x, y], t, function(status, result) {
-                if (result.bounds) {
-                    for (var i = 0; i < result.bounds.length; i++) {
-                        var polygon = new AMap.Polygon({
-                            map: map,
-                            fillColor: color,
-                            fillOpacity: "0.4",
-                            strokeColor: color,
-                            strokeOpacity: "0.8",
-                            strokeWeight: 1
-                        });
-                        //得到到达圈的多边形路径
-                        polygon.setPath(result.bounds[i]);
-                        polygonArray.push(polygon);
-                    }
-                }
-            }, {
-                policy: v
-            });
-        }
-
-        function addMarkerByAddress(address) {
-            var geocoder = new AMap.Geocoder({
-                city: "成都",
-                radius: 1000
-            });
-            geocoder.getLocation(address, function(status, result) {
-                if (status === "complete" && result.info === 'OK') {
-                    var geocode = result.geocodes[0];
-                    rentMarker = new AMap.Marker({
-                        map: map,
-                        title: address,
-                        icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-                        position: [geocode.location.getLng(), geocode.location.getLat()]
-                    });
-                    rentMarkerArray.push(rentMarker);
-
-                    rentMarker.content = "<div>房源：<a target = '_blank' href='http://cd.58.com/pinpaigongyu/?key=" + address + "'>" + address + "</a><div>"
-                    rentMarker.on('click', function(e) {
-                        infoWindow.setContent(e.target.content);
-                        infoWindow.open(map, e.target.getPosition());
-                        if (amapTransfer) amapTransfer.clear();
-                        amapTransfer = new AMap.Transfer({
-                            map: map,
-                            policy: AMap.TransferPolicy.LEAST_TIME,
-                            city: "成都市",
-                            panel: 'transfer-panel'
-                        });
-                        amapTransfer.search([{
-                            keyword: workAddress
-                        }, {
-                            keyword: address
-                        }], function(status, result) {})
-                    });
-                }
-            })
-        }
-
-        function delWorkLocation() {
-            if (polygonArray) map.remove(polygonArray);
-            if (workMarker) map.remove(workMarker);
-            polygonArray = [];
-        }
-
+        //清除已有标记
         function delRentLocation() {
             if (rentMarkerArray) map.remove(rentMarkerArray);
             rentMarkerArray = [];
         }
-
-        function loadWorkLocation() {
-            delWorkLocation();
-            var geocoder = new AMap.Geocoder({
-                city: "成都",
-                radius: 1000
-            });
-
-            geocoder.getLocation(workAddress, function(status, result) {
-                if (status === "complete" && result.info === 'OK') {
-                    var geocode = result.geocodes[0];
-                    x = geocode.location.getLng();
-                    y = geocode.location.getLat();
-                    loadWorkMarker(x, y);
-                    loadWorkRange(x, y, 60, "#3f67a5", vehicle);
-                    map.setZoomAndCenter(12, [x, y]);
-                }
-            })
-        }
-
+        //
         function loadRentLocationByFile(fileName) {
             //先删除现有的房源标记
             delRentLocation();
@@ -250,6 +151,116 @@
                 });
             });
         }
+        //将所有的房源信息以点标记形式展现
+        function addMarkerByAddress(address) {
+            var geocoder = new AMap.Geocoder({
+                city: "成都",
+                radius: 1000
+            });
+            geocoder.getLocation(address, function(status, result) {
+                if (status === "complete" && result.info === 'OK') {
+                    var geocode = result.geocodes[0];
+                    //点标记是用来标示某个位置点信息的一种地图要素，
+                    rentMarker = new AMap.Marker({
+                        map: map,
+                        title: address,
+                        icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+                        position: [geocode.location.getLng(), geocode.location.getLat()]
+                    });
+                    rentMarkerArray.push(rentMarker);
+
+                    rentMarker.content = "<div>房源：<a target = '_blank' href='http://cd.58.com/pinpaigongyu/?key=" + address + "'>" + address + "</a><div>"
+                    rentMarker.on('click', function(e) {
+                        //设置信息体窗口信息
+                        infoWindow.setContent(e.target.content);
+                        infoWindow.open(map, e.target.getPosition());
+                        //路线规划
+                        if (amapTransfer) amapTransfer.clear();
+                        //AMap.Transfer公交路线规划对象
+                        amapTransfer = new AMap.Transfer({
+                            map: map,
+                            policy: AMap.TransferPolicy.LEAST_TIME,
+                            city: "成都市",
+                            panel: 'transfer-panel'
+                        });
+                        amapTransfer.search([{
+                            keyword: workAddress
+                        }, {
+                            keyword: address
+                        }], function(status, result) {})
+                    });
+                }
+            })
+        }
+
+         // //更新工作地点，加载公交到达圈
+        // function workLocationSelected(e) {
+        //     workAddress = e.poi.name;
+        //     loadWorkLocation();
+        // }
+
+        // //载入工作地点
+        // function loadWorkMarker(x, y, locationName) {
+        //     workMarker = new AMap.Marker({
+        //         map: map,
+        //         title: locationName,
+        //         icon: 'http://webapi.amap.com/theme/v1.3/markers/n/mark_r.png',
+        //         position: [x, y]
+
+        //     });
+        // }
+
+        // //计算工作地点范围
+        // function loadWorkRange(x, y, t, color, v) {
+        //     arrivalRange.search([x, y], t, function(status, result) {
+        //         if (result.bounds) {
+        //             for (var i = 0; i < result.bounds.length; i++) {
+        //                 var polygon = new AMap.Polygon({
+        //                     map: map,
+        //                     fillColor: color,
+        //                     fillOpacity: "0.4",
+        //                     strokeColor: color,
+        //                     strokeOpacity: "0.8",
+        //                     strokeWeight: 1
+        //                 });
+        //                 //得到到达圈的多边形路径
+        //                 polygon.setPath(result.bounds[i]);
+        //                 polygonArray.push(polygon);
+        //             }
+        //         }
+        //     }, {
+        //         policy: v
+        //     });
+        // }
+
+        // //清除之前的工作地点
+        // function delWorkLocation() {
+        //     if (polygonArray) map.remove(polygonArray);
+        //     if (workMarker) map.remove(workMarker);
+        //     polygonArray = [];
+        // }
+
+        // //工作地点
+        // function loadWorkLocation() {
+        //     delWorkLocation();
+        //     var geocoder = new AMap.Geocoder({
+        //         city: "成都",
+        //         radius: 1000
+        //     });
+
+        //     geocoder.getLocation(workAddress, function(status, result) {
+        //         if (status === "complete" && result.info === 'OK') {
+        //             var geocode = result.geocodes[0];
+        //             x = geocode.location.getLng();
+        //             y = geocode.location.getLat();
+        //             loadWorkMarker(x, y);
+        //             loadWorkRange(x, y, 60, "#3f67a5", vehicle);
+        //             map.setZoomAndCenter(12, [x, y]);
+        //         }
+        //     })
+        // }
+
+
     </script>
 </body>
 
