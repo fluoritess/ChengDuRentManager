@@ -23,7 +23,10 @@ def getdata():
     for q in range(len(list)):
         url = 'https://cd.lianjia.com/zufang/'
         url += list[q] + "/pg"
-        for y in range(2):
+        for y in range(7):
+            len_str=len(url)
+            if y>0:
+                url=url[0:len_str-1]
             yeshu = str(y+1)
             url+=yeshu
             headers={
@@ -31,14 +34,8 @@ def getdata():
              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3676.400 QQBrowser/10.4.3505.400"
              }
             # url = 'https://cd.lianjia.com/zufang/jinjiang/pg1'
-
-
-
             response=requests.get(url,headers=headers)#,headers=headers#
             response.encoding=response.apparent_encoding
-
-
-
             p=[]
             soup=BeautifulSoup(response.text,'html.parser')# BeautifulSoup解析
             # text = soup.find("span",attrs={"class","content__list--item-price"})
@@ -89,9 +86,11 @@ def getdata():
                 address=""
                 for i in range(len(address_a)):
                      address+=address_a[i].text
-
-                csv_writer.writerow([house_name, house_layout, area,house_direction, address,price])
+                #房屋面积
+                house_area_=address_p.text.split()
+                house_area=house_area_[2]
+                csv_writer.writerow([house_name, house_layout,house_direction, house_area,area, address,price])
 
 if __name__ == '__main__':
-    csv_writer.writerow(["房源名称", "户型", "面向", "所属区","地址","价钱"])
+    csv_writer.writerow(["房源名称", "户型", "面向", "面积","所属区","地址","价钱"])
     getdata()
