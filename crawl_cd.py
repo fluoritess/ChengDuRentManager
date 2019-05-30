@@ -11,7 +11,7 @@ import string
 # 已完成的 页数序号，初始为0
 page = 0
 
-csv_file = open("cdlianjia.csv", "w", newline='')
+csv_file = open("cdlianjia2.csv", "w", newline='')
 csv_writer = csv.writer(csv_file, delimiter=',')
 
 list=["jinjiang","qingyang","wuhou","gaoxin7","chenghua","jinniu","tianfuxinqu","gaoxinxi1","shuangliu","longquanyi","xindou"]
@@ -23,7 +23,7 @@ def getdata():
     for q in range(len(list)):
         url = 'https://cd.lianjia.com/zufang/'
         url += list[q] + "/pg"
-        for y in range(7):
+        for y in range(100):
             len_str=len(url)
             if y>0:
                 url=url[0:len_str-1]
@@ -55,7 +55,10 @@ def getdata():
                 #户型
                 house_layout=tital[1]
                 #面向
-                house_direction=tital[2]
+                if len(tital)>2:
+                    house_direction=tital[2]
+                else:
+                    house_direction=''
                 #地点
                 address_p=totaldivlist[i].find("p", attrs={"class", "content__list--item--des"})
                 address_a=address_p.find_all("a")
@@ -90,7 +93,9 @@ def getdata():
                 house_area_=address_p.text.split()
                 house_area=house_area_[2]
                 csv_writer.writerow([house_name, house_layout,house_direction, house_area,area, address,price])
-
+            baibai_x=(y+1)*(101*(q+1))
+            baifen_y=101*(101*(len(list)))
+            print("爬取进度"+str(baibai_x/baifen_y))
 if __name__ == '__main__':
     csv_writer.writerow(["房源名称", "户型", "面向", "面积","所属区","地址","价钱"])
     getdata()

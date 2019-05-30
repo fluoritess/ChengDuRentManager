@@ -5,7 +5,7 @@ import numpy as np
 import re
 mpl.rcParams['font.sans-serif']=['SimHei'] #指定默认字体 SimHei为黑体
 mpl.rcParams['axes.unicode_minus']=False #用来正常显示负号
-Date = pd.read_csv('cdlianjia.csv')
+Date = pd.read_csv('cdlianjia2.csv')
 # 获取所属区
 areas = list(Date.groupby('所属区').size().index)
 #每个区房租平均价钱
