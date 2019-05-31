@@ -8,14 +8,11 @@ import time
 import re
 import string
 
-# 已完成的 页数序号，初始为0
-page = 0
-
 csv_file = open("cdlianjia2.csv", "w", newline='')
 csv_writer = csv.writer(csv_file, delimiter=',')
 
 list=["jinjiang","qingyang","wuhou","gaoxin7","chenghua","jinniu","tianfuxinqu","gaoxinxi1","shuangliu","longquanyi","xindou"]
-# list=["jinjiang","qingyang"]
+
 # 去掉所有的html标签
 reg1 = re.compile("<[^>]*>")
 reg2 = re.compile('</?w+[^>]*>')

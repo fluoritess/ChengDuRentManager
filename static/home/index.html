@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="css/index_bootstrap.css" rel='stylesheet' type='text/css'/>
+    <link href="css/index_style.css" rel="stylesheet" type="text/css" media="all"/>
+    <script src="js/jquery.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Amaranth:400,700,700italic,400italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Signika+Negative:300,400,600,700|Amaranth:400,700,700italic,400italic' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <body>
+		<!--header starts-->
+<div class="header">
+	 <div class="container">
+	     <div class="top-header">
+			 <div class="logo">
+				 	<a href="index.html"><img src="images/logo.png" alt="" /></a>
+			 </div>
+			 <div class="top-menu">
+				<span class="menu"> </span>
+				<ul>
+					 <li class="active"><span class="pic1"></span><a href="index.jsp">主页</a></li>
+					 <li><span class="pic2"></span><a href="map/SearchView.html">注册/登录</a></li>
+					 <li><span class="pic3"></span><a href="http://localhost:8080/static/404/error.html">使用说明</a></li>
+					 <li><span class="pic4"></span><a href="http://localhost:8080/static/404/error.html">关于我们</a></li>
+						<div class="clearfix"></div>
+				 </ul>
+				  <!--script-nav-->
+				 <script>
+				 $("span.menu").click(function(){
+				 $(".top-menu ul").slideToggle("slow" , function(){
+				 });
+				 });
+				 </script>
+				 <!--script-nav-->
+			 </div>
+			 <div class="clearfix"></div>
+		  </div>
+	 </div>
+	      <div class="header-banner">
+		     <script src="js/responsiveslides.min.js"></script>
+		     <script>
+			 $(function () {
+			  $("#slider").responsiveSlides({
+				auto: true,
+				nav: true,
+				speed: 500,
+				namespace: "callbacks",
+				pager: true,
+			  });
+			 });
+			 </script>
+			  <div class="container2">
+				 <div class="slider">
+				     <div class="callbacks_container">
+						 <ul class="rslides" id="slider">
+						 <li>
+							<div class="sale-box">
+							<span class="on_sale title_shop">NEW</span>
+							</div>
+						  <img src="images/房租.png" alt="">
+						  <div class="caption">
+						<!-- <%--	<h1>6万家</h1>
+							<p>							
+								合作商户，遍历全球</p>	         --%> -->
+						  </div>
+						   </li>
+						 <li>
+						 <div class="sale-box">
+							<span class="on_sale title_shop">NEW</span>
+							</div>
+						  <img src="images/rent.png" alt="">
+							 <div class="caption">
+							<!-- <%--	<h1>小龙坎</h1>
+								<p>Xiaolongkan</p>	  --%> -->
+							 </div>
+						 </li>
+						 <li>
+						 <div class="sale-box">
+							<span class="on_sale title_shop">NEW</span>
+							</div>
+						  <img src="images/均价.png" alt="">
+						  <div class="caption">
+						<!-- <%--	<h1>神户牛排</h1>
+							<p>Shenhuniupai</p>	            	--%> -->
+						  </div>
+						 </li>
+						  </ul>
+							</div>
+					 </div>
+			     </div>	
+			 </div>	
+</div>
+<!--header ends-->
+<div class="copyrights">Collect from <a href="http://www.cssmoban.com/"  title=""></a></div>
+<div class="container">
+	 <div class="banner-content">
+	 <p><span>成都房租分析, </span>覆盖数万条成都租房数据，从房租价钱、租房面积、各个区、单位价钱等各个方面进行分析</p>
+	 </div>
+</div>
+</body>
+</html>

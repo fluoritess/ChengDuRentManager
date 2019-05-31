@@ -5,7 +5,7 @@ import numpy as np
 import re
 mpl.rcParams['font.sans-serif']=['SimHei'] #指定默认字体 SimHei为黑体
 mpl.rcParams['axes.unicode_minus']=False #用来正常显示负号
-Date = pd.read_csv('cdlianjia2.csv')
+Date = pd.read_csv('csv/cdlianjia.csv')
 # 获取所属区
 areas = list(Date.groupby('所属区').size().index)
 #每个区房租平均价钱
@@ -57,8 +57,6 @@ print(area_mean_price)
 x = np.arange(len(areas))
 width = 0.3
 fig,ax = plt.subplots()
-# plt.figure(figsize=(20,20))
-# ax.bar(x,area_mean_price,width,alpha = 0.8)
 plt.xticks(rotation=45)
 ax.set_xticks(x +width/2)#将坐标设置在指定位置
 ax.set_xticklabels(areas)#将横坐标替换成
@@ -75,7 +73,6 @@ print(area_mean_house_area)
 x = np.arange(len(areas))
 width = 0.2
 fig,ax = plt.subplots()
-# ax.bar(x,area_mean_house_area,width,alpha = 0.8)
 plt.xticks(rotation=45)
 ax.set_xticks(x +width/2)#将坐标设置在指定位置
 ax.set_xticklabels(areas)#将横坐标替换成
@@ -118,7 +115,6 @@ print(area_mean_perhouseareaprice)
 x = np.arange(len(areas))
 width = 0.2
 fig,ax = plt.subplots()
-# ax.bar(x,area_mean_perhouseareaprice,width,alpha = 0.8)
 plt.xticks(rotation=45)
 ax.set_xticks(x +width/2)#将坐标设置在指定位置
 ax.set_xticklabels(areas)#将横坐标替换成
