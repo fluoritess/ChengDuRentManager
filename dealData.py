@@ -9,10 +9,8 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from lxml import etree
 import time
-csv_file = open("completed.csv", "w", newline='')
+csv_file = open("csv/completed.csv", "w", newline='')
 csv_writer = csv.writer(csv_file, delimiter=',')
-mpl.rcParams['font.sans-serif']=['SimHei'] #指定默认字体 SimHei为黑体
-mpl.rcParams['axes.unicode_minus']=False #用来正常显示负号
 Date = pd.read_csv('csv/cdlianjia.csv')
 csv_writer.writerow(['价钱', '面积', '所属区'])
 area_ditc={'锦江区':1,'青阳区':2,'武侯区':3,'高新区':4,'成华区':5,'金牛区':6,'天府新区':7,'高新西区':8,'双流区':9,'龙泉驿区':10,'新都区':11}
@@ -33,7 +31,7 @@ for house_area in house_area_:
 for price in price_l_:
             price_num = re.sub("\D", "", price)
             price_num = int(price_num)
-            if price_num > 30000 or price_num < 100:  # 剔除反常数据
+            if price_num > 10000 or price_num < 100:  # 剔除反常数据
                 # print(len(Date))
                 Date = Date[~Date['价钱'].isin([price])]
 
